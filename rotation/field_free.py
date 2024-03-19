@@ -43,6 +43,7 @@ def field_free(
     rot_c: float,
     grid: Tuple[NDArray[np.float_], NDArray[np.float_], NDArray[np.float_]] = None,
 ) -> Tuple[
+    Tuple[str, str, str],
     NDArray[np.float_],
     NDArray[np.float_],
     List[Tuple[int, int, int]],
@@ -71,7 +72,7 @@ def field_free(
             arranged to correspond directly to the principal axes 'a', 'b', and 'c'.
             This facilitates an intuitive mapping between the molecular coordinate system
             (x, y, z) and the principal axes of inertia (a, b, c).
-            For instance, in the case of a (near)prolate-top molecule, where the 
+            For instance, in the case of a (near)prolate-top molecule, where the
             molecule's quantisation axis is aligned with the a-axis, the corresponding
             output tuple would be ('z', 'y', 'x'). This indicates that the principal axis
             'a' aligns with the molecular 'z' axis, 'b' with 'y', and 'c' with 'x'.
@@ -92,7 +93,7 @@ def field_free(
         near_prolate = True
         abc_axes = ("z", "y", "x")
     else:
-        near_prolate = False # near-oblate
+        near_prolate = False  # near-oblate
         abc_axes = ("x", "y", "z")
 
     k_list = [k for k in range(-j, j + 1)]
@@ -190,6 +191,7 @@ def field_free_linear(
     rot_b: float,
     grid: Tuple[NDArray[np.float_], NDArray[np.float_], NDArray[np.float_]] = None,
 ) -> Tuple[
+    Tuple[str, str, str],
     NDArray[np.float_],
     NDArray[np.float_],
     List[Tuple[int, int, int]],
