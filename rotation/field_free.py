@@ -67,11 +67,19 @@ def field_free(
             α, β, and γ, respectively.
 
     Returns:
+        (Tuple[str, str, str]): A tuple containing three characters, 'x', 'y', and 'z',
+            arranged to correspond directly to the principal axes 'a', 'b', and 'c'.
+            This facilitates an intuitive mapping between the molecular coordinate system
+            (x, y, z) and the principal axes of inertia (a, b, c).
+            For instance, in the case of a (near)prolate-top molecule, where the 
+            molecule's quantisation axis is aligned with the a-axis, the corresponding
+            output tuple would be ('z', 'y', 'x'). This indicates that the principal axis
+            'a' aligns with the molecular 'z' axis, 'b' with 'y', and 'c' with 'x'.
         (numpy.ndarray): Rotational energies.
         (numpy.ndarray): 2D array of rotational state eigenvectors.
         (List[Tuple[int, int, int]]): List containing assignments (J, ka, kc)
             for each rotational state.
-        (Tuple[numpy.ndarray]): Tuple with three 1D grids of Euler angles
+        (Tuple[numpy.ndarray]): A tuple with three 1D grids of Euler angles
             α, β, and γ, respectively, used for computing rotational wavefunctions.
         (numpy.ndarray): A three-dimensional array representing the rotational
             wavefunctions computed on the specified or default grid of Euler angles.
@@ -82,8 +90,10 @@ def field_free(
     """
     if abs(rot_b - rot_c) < (rot_a - rot_b):
         near_prolate = True
+        abc_axes = ("z", "y", "x")
     else:
-        near_prolate = False
+        near_prolate = False # near-oblate
+        abc_axes = ("x", "y", "z")
 
     k_list = [k for k in range(-j, j + 1)]
 
@@ -157,6 +167,7 @@ def field_free(
 
     if near_prolate:
         return (
+            abc_axes,
             enr_near_prolate,
             vec_near_prolate,
             assignment,
@@ -165,6 +176,7 @@ def field_free(
         )
     else:
         return (
+            abc_axes,
             enr_near_oblate,
             vec_near_oblate,
             assignment,
@@ -201,11 +213,14 @@ def field_free_linear(
             α, β, and γ, respectively.
 
     Returns:
+        (Tuple[str, str, str]): A tuple containing three characters, 'x', 'y', and 'z',
+            arranged to correspond directly to the principal axes 'a', 'b', and 'c'.
+            For linear molecule, this is always ('x', 'y', 'z').
         (numpy.ndarray): Rotational energies of linear molecule.
         (numpy.ndarray): 2D array of rotational state eigenvectors.
         (List[Tuple[int, int, int]]): List containing assignments (J, ka, 0)
             for each rotational state.
-        (Tuple[numpy.ndarray]): Tuple with three 1D grids of Euler angles
+        (Tuple[numpy.ndarray]): A tuple with three 1D grids of Euler angles
             α, β, and γ, respectively, used for computing rotational wavefunctions.
         (numpy.ndarray): A three-dimensional array representing the rotational
             wavefunctions computed on the specified or default grid of Euler angles.
@@ -253,4 +268,5 @@ def field_free_linear(
 
     grid_func = np.dot(vec.T, symtop[:, j : j + 1, :])  # k=0 correspond to index j
 
-    return enr, vec, assignment, (alpha, beta, gamma), grid_func
+    abc_axes = ("x", "y", "z")
+    return abc_axes, enr, vec, assignment, (alpha, beta, gamma), grid_func
