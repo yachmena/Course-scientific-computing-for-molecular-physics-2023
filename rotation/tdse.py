@@ -4,7 +4,6 @@ import numpy as np
 from scipy.linalg import expm
 from numpy.typing import NDArray
 from typing import Callable, List, Tuple
-from scipy import constants
 
 
 def propagate(
