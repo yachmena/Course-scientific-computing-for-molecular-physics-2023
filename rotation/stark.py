@@ -54,18 +54,18 @@ def dipole_me_j_pair(
         ],
         dtype=np.complex128,
     )
-    matrix_u_inverse = np.linalg.inv(matrix_u)
+    matrix_u_inverse = np.linalg.pinv(matrix_u)
 
     def _matrix_k(j1, k1, j2, k2):
         three_j = np.array(
-            [wigner_3j(j2, 1, j1, k2, sigma, -k1) for sigma in (1, 0, -1)],
+            [wigner_3j(j1, 1, j2, -k1, sigma, k2) for sigma in (1, 0, -1)],
             dtype=np.float64,
         )
         return (-1) ** k1 * np.dot(np.dot(three_j, matrix_u), dipole_mol)
 
     def _matrix_m(j1, m1, j2, m2):
         three_j = np.array(
-            [wigner_3j(j2, 1, j1, m2, sigma, -m1) for sigma in (1, 0, -1)],
+            [wigner_3j(j1, 1, j2, -m1, sigma, m2) for sigma in (1, 0, -1)],
             dtype=np.float64,
         )
         return (

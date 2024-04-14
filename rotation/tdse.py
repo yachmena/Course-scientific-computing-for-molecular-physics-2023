@@ -44,7 +44,7 @@ def propagate(
         f_norm = np.linalg.norm(f)
 
         if f_norm > zero_field_thresh:
-            field_matrix = -np.dot(dipole_matrix.T, field(time)).T
+            field_matrix = -np.dot(dipole_matrix.T, f).T
             if split:
                 time_evolution_oper = expm(-1j * field_matrix * time_step * 2 * np.pi)
                 time_evolution_oper *= exp_field_free[:, None]
